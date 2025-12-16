@@ -1,3 +1,4 @@
+#include <cstring>
 #include <iostream>
 
 void uppercase(char *str)
