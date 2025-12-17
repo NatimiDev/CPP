@@ -10,22 +10,32 @@ void PhoneBook::addContact(Contact c)
 
 std::string formatField(const std::string &str)
 {
-	if (str.length() > 10)
-		return str.substr(0, 9) + ".";
-	return std::string(10 - str.length(), ' ') + str;
-}
+	std::string result;
 
+	if (str.length() > 10)
+	{
+		result = str.substr(0, 9) + ".";
+	}
+	else
+	{
+		int padding = 10 - str.length();
+		for (int i = 0; i < padding; i++)
+			result += ' ';
+		result += str;
+	}
+	return result;
+}
 
 void PhoneBook::printContact(int idx)
 {
 	if (idx < 0 || idx > 7)
 	{
-		std::cout << "Invalid index. Please choose index between 0 and 7";
+		std::cout << "Invalid index. Please choose index between 0 and 7\n";
 		return;
 	}
 	if (contacts[idx].getFirstName().empty())
 	{
-		std::cout << "Entry is empty. Please try again";
+		std::cout << "Entry is empty. Please try again\n";
 		return;
 	}
 	this->contacts[idx].print();
@@ -52,7 +62,6 @@ void PhoneBook::printTable()
 
 	std::cout << "---------------------------------------------\n";
 }
-
 
 void add(PhoneBook &phoneBook)
 {
@@ -99,7 +108,7 @@ int main()
 	{
 		std::cout << "Type a command: ";
 		std::cin >> cmd;
-		if (cmd.compare("EXIT") == 0)
+		if (cmd == "EXIT")
 			break;
 		if (cmd == "ADD")
 			add(phoneBook);
