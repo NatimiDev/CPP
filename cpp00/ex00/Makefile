@@ -2,15 +2,15 @@ FLAGS := -Wall -Wextra -Werror
 NAME := megaphone
 FILES := megaphone.cpp
 
-all: ${NAME}
+all: $(NAME)
 
-${NAME}: ${FILES}
-	g++ ${FLAGS} ${FILES} -o ${NAME}
+$(NAME): $(FILES)
+	g++ $(FLAGS) $(FILES) -o $(NAME)
 
 clean:
-	rm -f ${NAME}
 
 fclean: clean
+	rm -f $(NAME)
 
 re: fclean all
 
