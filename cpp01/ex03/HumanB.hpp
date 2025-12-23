@@ -1,5 +1,5 @@
-#ifndef HUMANB_H
-#define HUMANB_H
+#ifndef HUMANB_HPP
+#define HUMANB_HPP
 
 #include <string>
 #include <iostream>
@@ -9,13 +9,13 @@ class HumanB
 {
 	private:
 		std::string name;
-		Weapon weapon;
+		Weapon *weapon;
 
 
 	public:
 		HumanB(std::string name);
 
-		void setWeapon(Weapon w);
+		void setWeapon(Weapon &w);
 		void attack();
 };
 

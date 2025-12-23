@@ -1,5 +1,5 @@
-#ifndef WEAPON_H
-#define WEAPON_H
+#ifndef WEAPON_HPP
+#define WEAPON_HPP
 
 #include "string"
 
@@ -13,7 +13,7 @@ class Weapon
 		Weapon(std::string type);
 
 		void setType(std::string type);
-		std::string getType();
+		const std::string& getType();
 };
 
 #endif
