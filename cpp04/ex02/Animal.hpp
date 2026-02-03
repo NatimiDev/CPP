@@ -2,7 +2,6 @@
 #define ANIMAL_HPP
 
 #include <string>
-#include <iostream>
 
 class Animal
 {
@@ -11,7 +10,7 @@ class Animal
 
 	public:
 		Animal();
-		Animal(const std::string &type) : type(type) {};
+		Animal(const std::string &type);
 		Animal(const Animal &other);
 		Animal &operator=(const Animal &to_copy);
 		virtual ~Animal();
