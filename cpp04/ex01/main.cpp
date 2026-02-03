@@ -26,7 +26,7 @@ int main()
 	if (cat1.getBrain() != cat2.getBrain())
 		std::cout << "Deep copy works! Different brains." << std::endl;
 	else
-		std::cout << "Shallow copy! Same brain pointer!" << std::endl;
+		std::cout << "Error! Same brain pointer!" << std::endl;
 	
 	for (int i = 0; i < arraySize; i++)
 		delete animals[i];
