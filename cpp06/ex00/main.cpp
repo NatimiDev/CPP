@@ -36,5 +36,17 @@ int main()
 	ScalarConverter::convert("150abc");
 	ScalarConverter::convert("42fa");
 	
+	std::cout << "\n=== Test 11: Integer overflow (INT_MAX + 1) ===" << std::endl;
+	ScalarConverter::convert("2147483648");
+	
+	std::cout << "\n=== Test 12: Integer underflow (INT_MIN - 1) ===" << std::endl;
+	ScalarConverter::convert("-2147483649");
+	
+	std::cout << "\n=== Test 13: Large double ===" << std::endl;
+	ScalarConverter::convert("999999999999.9");
+	
+	std::cout << "\n=== Test 14: Large float ===" << std::endl;
+	ScalarConverter::convert("999999999999.9f");
+
 	return 0;
 }
