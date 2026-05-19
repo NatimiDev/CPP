@@ -5,6 +5,7 @@
 #include <vector>
 #include <iterator>
 #include <iostream>
+#include <stdexcept>
 
 class Span
 {
@@ -14,7 +15,7 @@ class Span
 
 	public:
 		Span();
-		Span(int max_size);
+		Span(unsigned int max_size);
 		Span(const Span& other);
 		Span& operator=(const Span& other);
 		~Span();

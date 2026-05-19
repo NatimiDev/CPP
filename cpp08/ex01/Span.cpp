@@ -2,7 +2,7 @@
 
 Span::Span() : _max_size(0)
 {}
-Span::Span(int max_size): _max_size(max_size)
+Span::Span(unsigned int max_size): _max_size(max_size)
 {
     _numbers.reserve(_max_size);
 }
