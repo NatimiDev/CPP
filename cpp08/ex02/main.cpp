@@ -5,7 +5,7 @@
 
 static void testSubject()
 {
-	std::cout << "=== Subject test ===" << std::endl;
+	std::cout << "subject" << std::endl;
 	MutantStack<int> mstack;
 	mstack.push(5);
 	mstack.push(17);
@@ -30,7 +30,7 @@ static void testSubject()
 
 static void testIterators()
 {
-	std::cout << "=== Iterator test ===" << std::endl;
+	std::cout << "iterators" << std::endl;
 	MutantStack<int> ms;
 	for (int i = 1; i <= 5; ++i)
 		ms.push(i * 10);
@@ -48,7 +48,7 @@ static void testIterators()
 
 static void testStackSemantics()
 {
-	std::cout << "=== Stack semantics test ===" << std::endl;
+	std::cout << "stack semantics" << std::endl;
 	MutantStack<int> ms;
 	ms.push(10);
 	ms.push(20);
@@ -62,7 +62,7 @@ static void testStackSemantics()
 
 static void testEquivalenceWithList()
 {
-	std::cout << "=== Equivalence with std::list ===" << std::endl;
+	std::cout << "list equivalence" << std::endl;
 	MutantStack<int> ms;
 	std::list<int> lst;
 	int vals[] = {5, 3, 737, 0};
@@ -81,7 +81,7 @@ static void testEquivalenceWithList()
 
 static void testConstIterator()
 {
-	std::cout << "=== Const iterator test ===" << std::endl;
+	std::cout << "const iterator" << std::endl;
 	MutantStack<int> ms;
 	ms.push(7);
 	ms.push(14);
