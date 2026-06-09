@@ -55,12 +55,17 @@ bool RPN::applyOperator(char op)
 		std::cerr << "Error" << std::endl;
 		return false;
 	}
-	int b = _stack.top(); _stack.pop();
-	int a = _stack.top(); _stack.pop();
+	int b = _stack.top();
+	_stack.pop();
+	int a = _stack.top();
+	_stack.pop();
 
-	if (op == '+') _stack.push(a + b);
-	else if (op == '-') _stack.push(a - b);
-	else if (op == '*') _stack.push(a * b);
+	if (op == '+')
+		_stack.push(a + b);
+	else if (op == '-')
+		_stack.push(a - b);
+	else if (op == '*')
+		_stack.push(a * b);
 	else if (op == '/')
 	{
 		if (b == 0)
