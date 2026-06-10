@@ -26,7 +26,6 @@ class PmergeMe
 	private:
 		std::vector<int>					_vec;
 		std::vector<int>					_vecIdx;
-		std::vector<std::pair<int, int> >	_vecPairs;
 		std::vector<std::pair<int, int> >	_idxPairs;
 
 		std::deque<int>						_deque;
@@ -34,7 +33,6 @@ class PmergeMe
 
 		void	fillDeque(int argc, char **argv);
 
-		void 	fillPairsVector();
 		void 	fillIdxPairsVector();
 		void 	buildMainChainVector();
 		std::vector<int>::iterator lowerBoundByValue(
@@ -46,6 +44,10 @@ class PmergeMe
 		
 		void	mergeInsertVector();
 		void	mergeInsertDeque();
+
+
+		void setVector(const std::vector<int> &v) { _vec = v; }
+		const std::vector<int> &getSorted() const { return _vecIdx; }
 };
 
 #endif

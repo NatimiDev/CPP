@@ -2,7 +2,7 @@
 
 numbers=()
 
-for ((i=0; i<3000; i++)); do
+for ((i=0; i < 3000; i++)); do
     numbers+=("$RANDOM")
 done
 

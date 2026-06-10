@@ -5,9 +5,7 @@ PmergeMe::PmergeMe() {}
 PmergeMe::PmergeMe(const PmergeMe &other)
 {
 	_vec = other._vec;
-	_vecPairs = other._vecPairs;
 	_deque = other._deque;
-	_dequePairs = other._dequePairs;
 }
 
 PmergeMe &PmergeMe::operator=(const PmergeMe &other)
@@ -15,9 +13,7 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other)
 	if (this != &other)
 	{
 		_vec = other._vec;
-		_vecPairs = other._vecPairs;
 		_deque = other._deque;
-		_dequePairs = other._dequePairs;
 	}
 	return *this;
 }
@@ -41,13 +37,26 @@ void PmergeMe::fillVector(int count, char **numbers)
 }
 
 void PmergeMe::sortVector()
-{
-	if (_vec.size() <= 1)
+{	
+	if (_vec.empty())
 		return;
+	if (_vec.size() == 1)
+	{
+		_vecIdx.push_back(0);
+		return;
+	}
 	if (_vec.size() == 2)
 	{
-		if (_vec[0] > _vec[1])
-			std::swap(_vec[0], _vec[1]);
+		if (_vec[0] <= _vec[1])
+		{
+			_vecIdx.push_back(0);
+			_vecIdx.push_back(1);
+		}
+		else
+		{
+			_vecIdx.push_back(1);
+			_vecIdx.push_back(0);
+		}
 		return;
 	}
 
@@ -67,17 +76,6 @@ void PmergeMe::sortVector()
 	}
 }
 
-void PmergeMe::fillPairsVector()
-{
-	for (size_t i = 0; i + 1 < _vec.size(); i += 2)
-	{
-		if (_vec[i] > _vec[i + 1])
-			_vecPairs.push_back(std::make_pair(i, i + 1));
-		else
-			_vecPairs.push_back(std::make_pair(i + 1, i));
-	}
-}
-
 void PmergeMe::fillIdxPairsVector()
 {
 	for (size_t i = 0; i + 1 < _vec.size(); i += 2)
@@ -89,15 +87,40 @@ void PmergeMe::fillIdxPairsVector()
 	}
 }
 
+// void PmergeMe::buildMainChainVector()
+// {
+//     if (_idxPairs.empty())
+//         return ;
+
+//     for (size_t i = 0; i < _idxPairs.size(); i++)
+//         for (size_t j = i + 1; j < _idxPairs.size(); j++)
+//             if (_vec[_idxPairs[i].first] > _vec[_idxPairs[j].first])
+//                 std::swap(_idxPairs[i], _idxPairs[j]);
+
+//     _vecIdx.clear();
+//     for (size_t i = 0; i < _idxPairs.size(); i++)
+//         _vecIdx.push_back(_idxPairs[i].first);
+// }
+
 void PmergeMe::buildMainChainVector()
 {
 	if (_idxPairs.empty())
 		return ;
 
+	std::vector<int> winners;
 	for (size_t i = 0; i < _idxPairs.size(); i++)
-		for (size_t j = i + 1; j < _idxPairs.size(); j++)
-			if (_vec[_idxPairs[i].first] > _vec[_idxPairs[j].first])
-				std::swap(_idxPairs[i], _idxPairs[j]);
+		winners.push_back(_vec[_idxPairs[i].first]);
+
+	PmergeMe sub;
+	sub.setVector(winners);
+	sub.sortVector();
+	std::vector<int> order = sub.getSorted();
+
+	// reorder pairs directly by that permutation
+	std::vector<std::pair<int, int> > sortedPairs;
+	for (size_t i = 0; i < order.size(); i++)
+		sortedPairs.push_back(_idxPairs[order[i]]);
+	_idxPairs = sortedPairs;
 
 	_vecIdx.clear();
 	for (size_t i = 0; i < _idxPairs.size(); i++)
@@ -107,24 +130,20 @@ void PmergeMe::buildMainChainVector()
 void PmergeMe::insertPendingVector()
 {
 	std::vector<int> jacobsthal = buildJacobsthalVector();
-	std::vector<bool> inserted(_idxPairs.size(), false);
-	_vecIdx.insert(_vecIdx.begin(), _idxPairs[0].second); // insert first elem cause smallest
-	inserted[0] = true;
+	_vecIdx.insert(_vecIdx.begin(), _idxPairs[0].second);
 
-	for (size_t j = 0; j < jacobsthal.size(); j++)
+	int prev = 1;
+	for (size_t j = 1; j < jacobsthal.size(); j++)
 	{
-		int idx = jacobsthal[j] - 1;
-		for (int k = idx; k >= 0; k--)
+		for (int k = jacobsthal[j] - 1; k >= prev; k--)
 		{
-			if (inserted[k])
-				break;
 			std::vector<int>::iterator bound =
 				lowerBoundByValue(_vecIdx.begin(), _vecIdx.end(), _vec[_idxPairs[k].first]);
 			std::vector<int>::iterator pos =
 				lowerBoundByValue(_vecIdx.begin(), bound, _vec[_idxPairs[k].second]);
 			_vecIdx.insert(pos, _idxPairs[k].second);
-			inserted[k] = true;
 		}
+		prev = jacobsthal[j];
 	}
 }
 
@@ -172,7 +191,6 @@ void PmergeMe::printVector() const
 		std::cout << _vec[i] << " ";
 	std::cout << std::endl;
 }
-
 
 void PmergeMe::printSortedVector() const
 {
