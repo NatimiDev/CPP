@@ -33,6 +33,7 @@ void PmergeMe::fillVector(int count, char **numbers)
 			exit(1);
 		}
 		_vec.push_back(n);
+        _deque.push_back(n);
 	}
 }
 
@@ -194,7 +195,133 @@ void PmergeMe::printVector() const
 
 void PmergeMe::printSortedVector() const
 {
+	if (_vecIdx.empty())
+		return;
+
 	for (size_t i = 0; i < _vecIdx.size(); i++)
 		std::cout << _vec[_vecIdx[i]] << " ";
+	std::cout << std::endl;
+}
+
+
+void PmergeMe::sortDeque()
+{
+    if (_deque.size() <= 1)
+        return;
+
+    fillPairsDeque();
+    buildMainChainDeque();
+    insertPendingDeque();
+}
+
+void PmergeMe::fillPairsDeque()
+{
+    for (size_t i = 0; i + 1 < _deque.size(); i += 2)
+    {
+        if (_deque[i] > _deque[i + 1])
+            _dequePairs.push_back(std::make_pair(_deque[i], _deque[i + 1]));
+        else
+            _dequePairs.push_back(std::make_pair(_deque[i + 1], _deque[i]));
+    }
+}
+
+void PmergeMe::buildMainChainDeque()
+{
+    std::deque<int> winners;
+
+    for (size_t i = 0; i < _dequePairs.size(); i++)
+        winners.push_back(_dequePairs[i].first);
+
+    if (winners.size() > 1)
+    {
+        PmergeMe sub;
+        sub._deque = winners;
+        sub.sortDeque();
+        winners = sub._deque;
+    }
+
+    std::deque<std::pair<int,int> > sortedPairs;
+
+    for (size_t i = 0; i < winners.size(); i++)
+    {
+        for (size_t j = 0; j < _dequePairs.size(); j++)
+        {
+            if (_dequePairs[j].first == winners[i])
+            {
+                sortedPairs.push_back(_dequePairs[j]);
+                break;
+            }
+        }
+    }
+    _dequePairs = sortedPairs;
+
+    _deque.clear();
+    for (size_t i = 0; i < _dequePairs.size(); i++)
+        _deque.push_back(_dequePairs[i].first);
+}
+
+std::vector<int> PmergeMe::buildJacobsthalVectorD()
+{
+    std::vector<int> jac;
+
+    if (_dequePairs.size() == 0)
+        return jac;
+
+    jac.push_back(1);
+
+    if (_dequePairs.size() == 1)
+        return jac;
+
+    jac.push_back(3);
+
+    int i = 2;
+    while (true)
+    {
+        int next = jac[i - 1] + 2 * jac[i - 2];
+
+        if (next >= (int)_dequePairs.size())
+        {
+            jac.push_back(_dequePairs.size());
+            break;
+        }
+
+        jac.push_back(next);
+        i++;
+    }
+
+    return jac;
+}
+void PmergeMe::insertPendingDeque()
+{
+    std::vector<int> jac = buildJacobsthalVectorD();
+
+    if (!_dequePairs.empty())
+    {
+        auto it = std::lower_bound(_deque.begin(), _deque.end(), _dequePairs[0].second);
+        _deque.insert(it, _dequePairs[0].second);
+    }
+
+    int prev = 1;
+
+    for (size_t j = 1; j < jac.size(); j++)
+    {
+        for (int k = jac[j] - 1; k >= prev; k--)
+        {
+            if (k >= (int)_dequePairs.size())
+                continue;
+
+            int val = _dequePairs[k].second;
+
+            auto pos = std::lower_bound(_deque.begin(), _deque.end(), val);
+            _deque.insert(pos, val);
+        }
+        prev = jac[j];
+    }
+}
+
+void PmergeMe::printDeque() const
+{
+	for (size_t i = 0; i < _deque.size(); i++)
+		std::cout << _deque[i] << " ";
 	std::cout << std::endl;
 }

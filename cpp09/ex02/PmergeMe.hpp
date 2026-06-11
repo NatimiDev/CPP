@@ -16,12 +16,14 @@ class PmergeMe
 		~PmergeMe();
 
 		void	fillVector(int count, char **numbers);
-
 		void	sortVector();
-		void	sortDeque(int argc, char **argv);
 
 		void	printVector() const;
 		void	printSortedVector() const;
+
+		void	fillDeque(int argc, char **argv);
+		void	sortDeque();
+		void	printDeque() const;
 
 	private:
 		std::vector<int>					_vec;
@@ -31,19 +33,20 @@ class PmergeMe
 		std::deque<int>						_deque;
 		std::deque<std::pair<int, int> >	_dequePairs;
 
-		void	fillDeque(int argc, char **argv);
 
 		void 	fillIdxPairsVector();
 		void 	buildMainChainVector();
+		void	insertPendingVector();
 		std::vector<int>::iterator lowerBoundByValue(
 			std::vector<int>::iterator lo, std::vector<int>::iterator hi, int val);
 
 		std::vector<int> buildJacobsthalVector();
+		std::vector<int> buildJacobsthalVectorD();
 
-		void	insertPendingVector();
 		
-		void	mergeInsertVector();
-		void	mergeInsertDeque();
+		void 	fillPairsDeque();
+		void 	buildMainChainDeque();
+		void	insertPendingDeque();
 
 
 		void setVector(const std::vector<int> &v) { _vec = v; }
